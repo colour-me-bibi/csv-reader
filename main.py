@@ -1,4 +1,5 @@
 
+import os
 from dataclasses import dataclass, fields
 from csv import DictReader
 
@@ -38,13 +39,20 @@ def csv_to_dataclass(cls, filepath):
 
 
 def main():
-    print("Reading dogs from csv...")
-    for dog in csv_to_dataclass(Animal, "data/dogs.csv"):
-        print(dog)
+    while True:
+        print("We have these animals:")
+        for f in os.listdir("data"):
+            print(f.rsplit(".", 1)[0])
 
-    print("\nReading cats from csv...")
-    for cat in csv_to_dataclass(Animal, "data/cats.csv"):
-        print(cat)
+        response = input("What animal you want?")
+
+        try:
+            print(f"Reading {response} from csv...")
+            for animal in csv_to_dataclass(Animal, f"data/{response}.csv"):
+                print(animal)
+            break
+        except FileNotFoundError:
+            print("File not found. Try again!")
 
 
 if __name__ == "__main__":
